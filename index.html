@@ -1,0 +1,655 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para ti</title>
+  <style>
+    :root {
+      --bg-1: #f7f0dd;
+      --bg-2: #efd6a1;
+      --bg-3: #dca954;
+      --card: #f7efdf;
+      --card-strong: #efe1b6;
+      --gold: #d49a38;
+      --gold-strong: #b7772d;
+      --ink: #4d331d;
+      --rose: #e76d87;
+      --leaf: #558a42;
+      --leaf-deep: #346a2a;
+      --soft: rgba(90, 53, 27, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Georgia, "Times New Roman", serif;
+      background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 42%, var(--bg-3) 100%);
+      color: var(--ink);
+    }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .petal-rain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .petal-rain img {
+      position: absolute;
+      top: -120px;
+      width: 68px;
+      height: 68px;
+      object-fit: cover;
+      opacity: 0.32;
+      animation: rainFall 10s linear infinite;
+      filter: drop-shadow(0 6px 10px rgba(96, 67, 35, 0.08));
+    }
+
+    @keyframes rainFall {
+      0% {
+        transform: translate3d(0, 0, 0) rotate(0deg);
+        opacity: 0;
+      }
+      12% { opacity: 0.42; }
+      100% {
+        transform: translate3d(18px, 120vh, 0) rotate(160deg);
+        opacity: 0;
+      }
+    }
+
+    .bottom-floral-base {
+      position: fixed;
+      left: 50%;
+      bottom: -18px;
+      transform: translateX(-50%);
+      width: min(760px, 92vw);
+      height: 240px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.96;
+    }
+
+    .bottom-floral-base img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center bottom;
+      opacity: 0.98;
+      transform: translateY(12px);
+      filter: saturate(1.08) drop-shadow(0 8px 12px rgba(96, 67, 35, 0.08));
+    }
+
+    .corner-floral-group {
+      position: absolute;
+      right: 18px;
+      bottom: 14px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.96;
+    }
+
+    .corner-floral-group img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 50%;
+      filter: drop-shadow(0 8px 12px rgba(96, 67, 35, 0.08));
+    }
+
+    .scene {
+      width: min(920px, calc(100vw - 40px));
+      position: relative;
+      z-index: 1;
+    }
+
+    .gift-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.02));
+      border: 1px solid rgba(91, 63, 35, 0.12);
+      border-radius: 32px;
+      box-shadow: 0 30px 60px rgba(117, 84, 37, 0.12);
+      padding: 18px;
+    }
+
+    .panel {
+      position: relative;
+      min-height: 540px;
+      border-radius: 26px;
+      background: linear-gradient(180deg, var(--card) 0%, var(--card-strong) 100%);
+      border: 1px solid rgba(90, 60, 27, 0.12);
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+    }
+
+    .flower-wrap {
+      position: relative;
+      width: 100%;
+      height: 340px;
+      display: grid;
+      place-items: center;
+      margin-top: 10px;
+      pointer-events: auto;
+    }
+
+    .flower-stage {
+      position: relative;
+      width: 320px;
+      height: 260px;
+      display: grid;
+      place-items: center;
+      transition: transform 0.7s ease;
+      margin-top: 8px;
+    }
+
+    .flower {
+      position: relative;
+      width: 260px;
+      height: 260px;
+      transform: translateY(14px);
+      display: grid;
+      place-items: center;
+      transition: transform 0.7s ease, opacity 0.7s ease;
+      cursor: pointer;
+      pointer-events: auto;
+      z-index: 2;
+    }
+
+    .flower:hover {
+      transform: translateY(14px) scale(1.02);
+    }
+
+    .flower.clicked {
+      transform: translateY(14px) scale(1.05);
+    }
+
+    .flower-main {
+      position: relative;
+      display: grid;
+      place-items: center;
+      z-index: 3;
+    }
+
+    .flower-main img {
+      width: 250px;
+      height: auto;
+      max-height: 260px;
+      object-fit: contain;
+      display: block;
+      filter: saturate(1.1) drop-shadow(0 10px 16px rgba(124, 87, 39, 0.18));
+      background: transparent;
+      transition: transform 0.7s ease, opacity 0.7s ease, filter 0.7s ease;
+      border-radius: 0;
+    }
+
+    .secondary-flowers {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .secondary-flowers img {
+      width: 250px;
+      height: auto;
+      max-height: 260px;
+      object-fit: contain;
+      opacity: 0;
+      transform: translateY(12px) scale(0.8);
+      transition: transform 0.7s ease, opacity 0.7s ease;
+      filter: drop-shadow(0 8px 14px rgba(124, 87, 39, 0.12));
+      border-radius: 0;
+      cursor: pointer;
+      pointer-events: none;
+    }
+
+    .flower-stage.reveal .secondary-flowers {
+      pointer-events: auto;
+    }
+
+    .flower-stage.reveal .secondary-flowers img {
+      pointer-events: auto;
+    }
+
+    .secondary-flowers img:hover {
+      transform: translateY(0) scale(1.04);
+    }
+
+    .flower-stage.reveal .secondary-flowers img {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      transition-duration: 1.2s;
+    }
+
+    .flower-stage.reveal .flower {
+      opacity: 0;
+      transform: scale(0.4);
+      pointer-events: none;
+      transition-duration: 1.6s;
+    }
+
+    .flower-stage.reveal .flower-main img {
+      opacity: 0;
+      transform: scale(0.4);
+      transition-duration: 1.6s;
+    }
+
+    .letter {
+      position: absolute;
+      inset: 0;
+      display: none;
+      place-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.7s ease;
+      padding: 20px;
+      z-index: 30;
+    }
+
+    .letter.show {
+      display: grid;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .card-letter {
+      width: min(640px, 92%);
+      background: linear-gradient(180deg, #fffdf9 0%, #f7ead1 100%);
+      border: 1px solid rgba(123, 87, 51, 0.12);
+      border-radius: 24px;
+      box-shadow: 0 20px 50px rgba(99, 69, 31, 0.18);
+      padding: 34px 30px 26px;
+      text-align: center;
+      transform: translateY(22px) scale(0.97);
+      transition: transform 0.7s ease;
+    }
+
+    .letter.show .card-letter {
+      transform: translateY(0) scale(1);
+    }
+
+    .card-letter h2 {
+      margin: 0 0 12px;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      color: #9a5638;
+    }
+
+    .card-letter .date {
+      display: block;
+      margin-bottom: 18px;
+      color: #b06e46;
+      font-style: italic;
+      font-size: 0.96rem;
+    }
+
+    .card-letter p {
+      margin: 0 auto 20px;
+      max-width: 480px;
+      font-size: 1.1rem;
+      line-height: 1.9;
+      color: #604430;
+    }
+
+    .signature {
+      display: block;
+      margin-top: 18px;
+      font-size: 1.1rem;
+      color: #9e5a3d;
+      font-style: italic;
+    }
+
+    .back-btn {
+      margin-top: 22px;
+      background: transparent;
+      border: 0;
+      color: #9b5d39;
+      cursor: pointer;
+      font: italic 1rem Georgia, serif;
+      text-decoration: underline;
+      text-decoration-color: rgba(155, 93, 57, 0.35);
+      text-underline-offset: 4px;
+    }
+
+    .video-modal {
+      position: absolute;
+      inset: 0;
+      display: none;
+      place-items: center;
+      background: rgba(62, 42, 25, 0.56);
+      backdrop-filter: blur(3px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      z-index: 20;
+    }
+
+    .video-modal.show {
+      display: grid;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .video-box {
+      width: min(720px, 84vw);
+      background: rgba(255, 250, 243, 0.96);
+      border: 1px solid rgba(130, 95, 59, 0.18);
+      border-radius: 22px;
+      padding: 18px 18px 12px;
+      box-shadow: 0 24px 60px rgba(66, 43, 16, 0.24);
+    }
+
+    .video-box video {
+      width: 100%;
+      border-radius: 14px;
+      display: block;
+      background: #000;
+    }
+
+    .video-fallback {
+      display: none;
+      width: 100%;
+      border-radius: 14px;
+      object-fit: cover;
+      background: linear-gradient(180deg, #f7efc2 0%, #e5c96d 100%);
+    }
+
+    .video-box.has-fallback .video-fallback {
+      display: block;
+    }
+
+    .video-box.has-fallback video {
+      display: none;
+    }
+
+    .video-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 12px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(130, 95, 59, 0.12);
+    }
+
+    .close-video, .video-back {
+      border: 0;
+      background: linear-gradient(180deg, #e8c26a 0%, #c98035 100%);
+      color: white;
+      border-radius: 999px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font: 600 0.95rem Georgia, serif;
+      min-width: 120px;
+    }
+
+    .video-back {
+      background: rgba(255, 255, 255, 0.5);
+      color: #7d4d2a;
+      border: 1px solid rgba(130, 95, 59, 0.18);
+    }
+
+    .hide-intro .overlay {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: rgba(247, 230, 186, 0.8);
+      backdrop-filter: blur(2px);
+      transition: opacity 0.6s ease;
+      z-index: 5;
+    }
+
+    .overlay-card {
+      width: min(420px, 80vw);
+      text-align: center;
+      background: rgba(255, 253, 248, 0.84);
+      border: 1px solid rgba(123, 87, 51, 0.18);
+      border-radius: 24px;
+      padding: 32px 26px;
+      box-shadow: 0 18px 40px rgba(112, 82, 44, 0.15);
+    }
+
+    .overlay-card h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      color: #9a5f2a;
+    }
+
+    .overlay-card p {
+      margin: 0 0 22px;
+      font-size: 1.05rem;
+      color: #593f28;
+      line-height: 1.7;
+    }
+
+    .overlay-card button {
+      border: 0;
+      background: linear-gradient(180deg, #eacb72 0%, #cd8c3d 55%, #b46f30 100%);
+      color: white;
+      border-radius: 999px;
+      padding: 13px 26px;
+      font: 600 0.98rem Georgia, serif;
+      cursor: pointer;
+      box-shadow: 0 12px 26px rgba(171, 103, 39, 0.25);
+    }
+
+    @media (max-width: 640px) {
+      .scene { width: min(92vw, 420px); }
+      .panel { min-height: 470px; }
+      .gift-card { padding: 10px; border-radius: 22px; }
+      .flower-wrap { height: 240px; }
+      .flower { transform: scale(0.82) translateY(18px); width: 220px; height: 220px; }
+      .flower-main img { width: 220px; height: auto; }
+      .corner-floral-group {
+        right: 10px;
+        bottom: 8px;
+      }
+      .corner-floral-group img {
+        width: 130px;
+        height: 130px;
+      }
+      .card-letter { padding: 28px 22px 20px; }
+      .video-box {
+        width: min(86vw, 480px);
+        padding: 12px 12px 10px;
+      }
+      .video-actions {
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .video-back, .close-video {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="petal-rain" aria-hidden="true">
+    <img src="flor3.jpg" style="left: 3%; animation-duration: 9s; animation-delay: 0s;" alt="" />
+    <img src="flor4.jpg" style="left: 12%; animation-duration: 11s; animation-delay: 0.8s;" alt="" />
+    <img src="flor3.jpg" style="left: 20%; animation-duration: 12s; animation-delay: 1.6s;" alt="" />
+    <img src="flor4.jpg" style="left: 30%; animation-duration: 10s; animation-delay: 0.4s;" alt="" />
+    <img src="flor3.jpg" style="left: 38%; animation-duration: 9s; animation-delay: 2.1s;" alt="" />
+    <img src="flor4.jpg" style="left: 47%; animation-duration: 11s; animation-delay: 1.1s;" alt="" />
+    <img src="flor3.jpg" style="left: 58%; animation-duration: 12s; animation-delay: 2.4s;" alt="" />
+    <img src="flor4.jpg" style="left: 68%; animation-duration: 10s; animation-delay: 0.9s;" alt="" />
+    <img src="flor3.jpg" style="left: 78%; animation-duration: 11s; animation-delay: 1.8s;" alt="" />
+    <img src="flor4.jpg" style="left: 87%; animation-duration: 9s; animation-delay: 0.2s;" alt="" />
+    <img src="flor3.jpg" style="left: 92%; animation-duration: 12s; animation-delay: 2.7s;" alt="" />
+  </div>
+
+  <main class="scene">
+    <div class="gift-card">
+      <section class="panel" id="panel">
+        <div class="overlay" id="overlay">
+          <div class="overlay-card">
+            <h1>Para ti</h1>
+            <p>He preparado algo pequeño, tierno y lleno de amor para recordarte lo mucho que te quiero.</p>
+            <button type="button" id="openGift">Abrir regalo</button>
+          </div>
+        </div>
+
+        <div class="corner-floral-group" aria-hidden="true">
+          <img src="flor3.jpg" alt="" />
+        </div>
+
+        <div class="flower-wrap" aria-hidden="true">
+          <div class="flower-stage" id="flowerStage">
+            <div class="secondary-flowers">
+              <img class="f1" src="flor2.jpg" alt="" />
+              <img class="f2" src="flor2.jpg" alt="" />
+              <img class="f3" src="flor2.jpg" alt="" />
+              <img class="f4" src="flor2.jpg" alt="" />
+            </div>
+
+            <div class="flower" id="flowerTrigger" aria-label="Flor principal">
+              <div class="flower-main">
+                <img src="flor1.jpg" alt="Flor principal" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="letter" id="letter">
+          <article class="card-letter">
+            <h2>Para el amor de mi vida</h2>
+            <span class="date">Hoy y siempre</span>
+            <p>
+              Quiero que sepas que cada día contigo se siente más bonito,
+              más tranquilo y más lleno de cariño. Eres la persona que hace que todo
+              tenga más sentido, más luz y más alegría.
+            </p>
+            <p>
+              Gracias por ser tú, por tu sonrisa, por tu paciencia, por tu amor.
+              Este pequeño detalle es solo una forma de decirte que te quiero mucho,
+              con todo mi corazón y con todo lo que soy.
+            </p>
+            <span class="signature">Con todo mi amor, siempre.</span>
+            <button class="back-btn" type="button" id="backBtn">Volver</button>
+          </article>
+        </div>
+
+        <div class="video-modal" id="videoModal" aria-hidden="true">
+          <div class="video-box" id="videoBox">
+            <img class="video-fallback" src="sorpresa.jpg" alt="Flores amarillas" />
+            <video controls playsinline preload="metadata" muted autoplay loop poster="sorpresa.jpg">
+              <source src="flores_amarillas.mp4" type="video/mp4" />
+            </video>
+            <div class="video-actions">
+              <button class="video-back" type="button" id="videoBack">Volver</button>
+              <button class="close-video" type="button" id="closeVideo">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const overlay = document.getElementById('overlay');
+    const openGift = document.getElementById('openGift');
+    const letter = document.getElementById('letter');
+    const backBtn = document.getElementById('backBtn');
+    const panel = document.getElementById('panel');
+    const flowerTrigger = document.getElementById('flowerTrigger');
+    const flowerStage = document.getElementById('flowerStage');
+    const secondaryFlowers = document.querySelectorAll('.secondary-flowers img');
+    const videoModal = document.getElementById('videoModal');
+    const videoBox = document.getElementById('videoBox');
+    const closeVideo = document.getElementById('closeVideo');
+    const videoBack = document.getElementById('videoBack');
+    const video = document.querySelector('#videoModal video');
+
+    const showVideoModal = () => {
+      videoModal.style.display = 'grid';
+      requestAnimationFrame(() => videoModal.classList.add('show'));
+      videoModal.setAttribute('aria-hidden', 'false');
+    };
+
+    const hideVideoModal = () => {
+      videoModal.classList.remove('show');
+      setTimeout(() => {
+        videoModal.style.display = 'none';
+      }, 220);
+      videoModal.setAttribute('aria-hidden', 'true');
+      if (video) {
+        video.pause();
+      }
+    };
+
+    video.addEventListener('error', () => {
+      videoBox.classList.add('has-fallback');
+    });
+
+    video.addEventListener('canplay', () => {
+      videoBox.classList.remove('has-fallback');
+    });
+
+    openGift.addEventListener('click', () => {
+      overlay.style.opacity = '0';
+      setTimeout(() => overlay.style.display = 'none', 500);
+      panel.classList.add('hide-intro');
+    });
+
+    flowerTrigger.addEventListener('click', () => {
+      flowerStage.classList.toggle('reveal');
+      flowerTrigger.classList.toggle('clicked');
+    });
+
+    backBtn.addEventListener('click', () => {
+      letter.classList.remove('show');
+      setTimeout(() => {
+        letter.style.display = 'none';
+      }, 220);
+    });
+
+    secondaryFlowers.forEach((flower, index) => {
+      flower.addEventListener('click', () => {
+        if (index === 0) {
+          letter.style.display = 'grid';
+          requestAnimationFrame(() => letter.classList.add('show'));
+          return;
+        }
+
+        if (index === 1) {
+          showVideoModal();
+          return;
+        }
+
+        if (index === 2 || index === 3) {
+          // Lo dejamos listo para definir más adelante.
+          return;
+        }
+      });
+    });
+
+    closeVideo.addEventListener('click', hideVideoModal);
+    videoBack.addEventListener('click', hideVideoModal);
+  </script>
+</body>
+</html>
