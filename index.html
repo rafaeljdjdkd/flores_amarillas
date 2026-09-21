@@ -387,6 +387,15 @@
       box-shadow: 0 24px 60px rgba(66, 43, 16, 0.24);
     }
 
+    .video-title {
+      display: block;
+      text-align: center;
+      margin: 0 0 12px;
+      font-size: clamp(1.2rem, 2vw, 1.8rem);
+      color: #9a5638;
+      font-weight: 700;
+    }
+
     .video-box video {
       width: 100%;
       border-radius: 14px;
@@ -628,7 +637,6 @@
             </p>
             <span class="signature">Recuerda que te amo, siempre.</span>
             <div class="card-actions">
-              <button class="card-btn" type="button" data-next="months">Siguiente</button>
               <button class="back-btn" type="button" id="backBtn">Volver</button>
             </div>
           </article>
@@ -636,6 +644,7 @@
 
         <div class="video-modal" id="videoModal" aria-hidden="true">
           <div class="video-box" id="videoBox">
+            <span class="video-title">Para tu 🧙‍♂️🧙‍♂️👅</span>
             <img class="video-fallback" src="sorpresa.jpg" alt="Flores amarillas" />
             <video controls playsinline preload="metadata" muted autoplay loop poster="sorpresa.jpg">
               <source src="flores_amarillas.mp4" type="video/mp4" />
@@ -665,7 +674,21 @@
     const videoBack = document.getElementById('videoBack');
     const video = document.querySelector('#videoModal video');
 
-    const showVideoModal = () => {
+    const showVideoModal = (sourceFile = 'flores_amarillas.mp4') => {
+      if (video) {
+        const source = video.querySelector('source') || document.createElement('source');
+        if (!video.querySelector('source')) {
+          video.appendChild(source);
+        }
+        source.src = sourceFile;
+        source.type = 'video/mp4';
+        video.load();
+        video.currentTime = 0;
+        requestAnimationFrame(() => {
+          video.play().catch(() => {});
+        });
+      }
+
       videoModal.style.display = 'grid';
       requestAnimationFrame(() => videoModal.classList.add('show'));
       videoModal.setAttribute('aria-hidden', 'false');
@@ -679,6 +702,7 @@
       videoModal.setAttribute('aria-hidden', 'true');
       if (video) {
         video.pause();
+        video.currentTime = 0;
       }
     };
 
@@ -699,33 +723,18 @@
           </p>
           <span class="signature">Te amo, siempre.</span>
           <div class="card-actions">
-            <button class="card-btn" type="button" data-next="video">Siguiente</button>
             <button class="back-btn" type="button" id="backBtn">Volver</button>
           </div>
         </article>
       `;
 
       const backBtnNew = document.getElementById('backBtn');
-      const nextBtnNew = letter.querySelector('[data-next]');
 
       backBtnNew.addEventListener('click', () => {
         letter.classList.remove('show');
         setTimeout(() => {
           letter.style.display = 'none';
         }, 220);
-      });
-
-      nextBtnNew.addEventListener('click', () => {
-        const videoSource = video?.querySelector('source');
-        if (videoSource) {
-          videoSource.src = 'perro_salchicha.mp4';
-          video.load();
-        }
-        letter.classList.remove('show');
-        setTimeout(() => {
-          letter.style.display = 'none';
-        }, 220);
-        showVideoModal();
       });
 
       letter.style.display = 'grid';
@@ -758,30 +767,6 @@
       }, 220);
     });
 
-    document.addEventListener('click', (event) => {
-      const nextButton = event.target.closest('[data-next]');
-      if (!nextButton) return;
-
-      const nextAction = nextButton.dataset.next;
-      if (nextAction === 'months') {
-        renderMonthsCard();
-        return;
-      }
-
-      if (nextAction === 'video') {
-        const videoSource = video?.querySelector('source');
-        if (videoSource) {
-          videoSource.src = 'perro_salchicha.mp4';
-          video.load();
-        }
-        letter.classList.remove('show');
-        setTimeout(() => {
-          letter.style.display = 'none';
-        }, 220);
-        showVideoModal();
-      }
-    });
-
     secondaryFlowers.forEach((flower, index) => {
       flower.addEventListener('click', () => {
         if (index === 0) {
@@ -791,7 +776,7 @@
         }
 
         if (index === 1) {
-          showVideoModal();
+          showVideoModal('flores_amarillas.mp4');
           return;
         }
 
@@ -801,12 +786,7 @@
         }
 
         if (index === 3) {
-          const videoSource = video?.querySelector('source');
-          if (videoSource) {
-            videoSource.src = 'perro_salchicha.mp4';
-            video.load();
-          }
-          showVideoModal();
+          showVideoModal('perro_salchicha.mp4');
           return;
         }
       });
@@ -817,3 +797,4 @@
   </script>
 </body>
 </html>
+
