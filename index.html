@@ -537,19 +537,14 @@
 
         <div class="letter" id="letter">
           <article class="card-letter">
-            <h2>Para el amor de mi vida</h2>
-            <span class="date">Hoy y siempre</span>
+            <h2>Para ti, mi amor</h2>
+            <span class="date">Hoy, mañana y siempre</span>
             <p>
-              Quiero que sepas que cada día contigo se siente más bonito,
-              más tranquilo y más lleno de cariño. Eres la persona que hace que todo
-              tenga más sentido, más luz y más alegría.
+              Sé que no es el mejor regalo de todos, pero aun así quiero que sepas
+              lo mucho que te importas para mí. Te quiero de verdad, y aunque no tenga
+              mucho dinero, siempre voy a buscar la manera de hacerte sentir especial.
             </p>
-            <p>
-              Gracias por ser tú, por tu sonrisa, por tu paciencia, por tu amor.
-              Este pequeño detalle es solo una forma de decirte que te quiero mucho,
-              con todo mi corazón y con todo lo que soy.
-            </p>
-            <span class="signature">Con todo mi amor, siempre.</span>
+            <span class="signature">Recuerda que te amo, siempre.</span>
             <button class="back-btn" type="button" id="backBtn">Volver</button>
           </article>
         </div>
@@ -641,8 +636,44 @@
           return;
         }
 
-        if (index === 2 || index === 3) {
-          // Lo dejamos listo para definir más adelante.
+        if (index === 2) {
+          letter.innerHTML = `
+            <article class="card-letter">
+              <h2>11 meses juntos</h2>
+              <span class="date">Un tiempo pequeño, pero lleno de amor</span>
+              <p>
+                Hoy cumplimos 11 meses juntos, y quiero agradecerte por cada segundo que hemos
+                pasado juntos. Me encanta tu risa, tus abrazos, tus besos y cada momento que
+                hemos compartido, porque todos han sido hermoso y realmente bello.
+              </p>
+              <p>
+                A pesar de todo lo que he hecho, me sigues queriendo y eso significa mucho para
+                mí. Simplemente quiero disculparme otra vez por todo. Realmente te amo y obvio
+                que yo te amo más 👅👅👅
+              </p>
+              <span class="signature">Te amo, siempre.</span>
+              <button class="back-btn" type="button" id="backBtn">Volver</button>
+            </article>
+          `;
+          const backBtnNew = document.getElementById('backBtn');
+          backBtnNew.addEventListener('click', () => {
+            letter.classList.remove('show');
+            setTimeout(() => {
+              letter.style.display = 'none';
+            }, 220);
+          });
+          letter.style.display = 'grid';
+          requestAnimationFrame(() => letter.classList.add('show'));
+          return;
+        }
+
+        if (index === 3) {
+          const videoSource = video?.querySelector('source');
+          if (videoSource) {
+            videoSource.src = 'perro_salchicha.mp4';
+            video.load();
+          }
+          showVideoModal();
           return;
         }
       });
