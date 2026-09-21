@@ -204,13 +204,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 18px;
+      gap: 10px;
+      width: min(100%, 320px);
+      margin: 0 auto;
       z-index: 4;
       pointer-events: none;
     }
 
     .secondary-flowers img {
-      width: 250px;
+      width: 68px;
       height: auto;
       max-height: 260px;
       object-fit: contain;
@@ -464,6 +466,8 @@
       .flower-wrap { height: 240px; }
       .flower { transform: scale(0.82) translateY(18px); width: 220px; height: 220px; }
       .flower-main img { width: 220px; height: auto; }
+      .secondary-flowers { width: min(100%, 270px); gap: 6px; }
+      .secondary-flowers img { width: 58px; }
       .corner-floral-group {
         right: 10px;
         bottom: 8px;
@@ -684,3 +688,4 @@
   </script>
 </body>
 </html>
+
